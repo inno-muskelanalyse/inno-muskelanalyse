@@ -1,8 +1,8 @@
 [submodule "src-tauri/vendor/preprocessing"]
 	path = src-tauri/vendor/preprocessing
-	url = https://github.com/leonardstruck/INNO-Muskelanalyse-Preprocessing.git
-	branch = main
+	url = https://github.com/inno-muskelanalyse/preprocessing.git
+	branch = 1.0.0
 [submodule "src-tauri/vendor/analysis"]
 	path = src-tauri/vendor/analysis
-	url = https://github.com/BerniUtz/INNO-Muskelanalyse-analysis.git
-	branch = v1.0.2
+	url = https://github.com/inno-muskelanalyse/analysis.git
+	branch = v3.0.0
