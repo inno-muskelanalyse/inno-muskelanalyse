@@ -52,21 +52,21 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install opencv@4
-          brew link --force opencv@4
         env:
           HOMEBREW_NO_INSTALL_CLEANUP: true
+          HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: true
 
       - name: install opencv (windows only)
         if: matrix.platform == 'windows-latest'
         run: |
-          choco install opencv --params "/InstallationPath:C:\OpenCV /Environment:C:\OpenCV"
+          choco install opencv --params "/InstallationPath:C:\"
 
       - name: install frontend dependencies
         run: yarn install # change this to npm or pnpm depending on which one you use
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OpenCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\OpenCV' }}
+          OpenCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\opencv\\build' }}
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'App v__VERSION__'
