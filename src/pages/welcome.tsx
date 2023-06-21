@@ -5,6 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import { NextPageWithLayout } from "./_app";
 import { useQuery } from "@tanstack/react-query";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import path from "path";
 
 const { version, author, displayName, filetypeAssociation, homepage } = packageInfo;
 
@@ -59,7 +60,14 @@ const Welcome: NextPageWithLayout = () => {
                         <div className="grid grid-cols-5 gap-1 py-4">
                             <Item Icon={FilePlusIcon} onClick={handle_create_project}>Create a new Project</Item>
                             <Item Icon={FileSearchIcon} onClick={handle_open_project}>Open Project</Item>
-                            <Item Icon={FileClockIcon} disabled={recentProject.isLoading || !recentProject.data} onClick={() => recentProject.data && handle_open_recent_project(recentProject.data)}>Open Recent</Item>
+                            <Item
+                                Icon={FileClockIcon}
+                                disabled={recentProject.isLoading || !recentProject.data}
+                                onClick={() => recentProject.data && handle_open_recent_project(recentProject.data)}
+                            >
+                                Open Recent
+                                {recentProject.data && <span className="text-gray-400 font-normal">{path.parse(recentProject.data).base}</span>}
+                            </Item>
                             <Item Icon={XIcon} onClick={handle_close_window}>Close</Item>
                         </div>
                     )
