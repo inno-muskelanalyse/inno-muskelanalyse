@@ -61,7 +61,15 @@ pub async fn check_requirements(
 }
 
 fn check_if_python_is_installed() -> Result<bool, String> {
-    let output = match Command::new("python").args(["--version"]).output() {
+    let python_path = match find_python_path() {
+        Some(path) => path,
+        None => {
+            error!("Failed to find python path");
+            return Err("Failed to find python path".to_string());
+        }
+    };
+
+    let output = match Command::new(&python_path).args(["--version"]).output() {
         Ok(output) => output,
         Err(error) => {
             error!("Failed to check if python is installed: {}", error);
@@ -69,21 +77,36 @@ fn check_if_python_is_installed() -> Result<bool, String> {
         }
     };
 
-    // check if process was successful
-    if !output.status.success() {
-        return Err(format!(
-            "Failed to check if python is installed: {}",
-            output.stderr
-        ));
-    }
-
-    debug!("Python version: {},{}", output.stdout, output.stderr);
-
     if output.stdout.contains("Python") {
-        Ok(true)
+        debug!("Python is installed at {}", python_path);
+        return Ok(true);
     } else {
-        Ok(false)
+        return Ok(false);
     }
+}
+
+fn find_python_path() -> Option<String> {
+    // check if python is in the path
+    let bin = match std::env::consts::OS {
+        "windows" => "python.exe",
+        _ => "python",
+    };
+    
+    if let Ok(path_var) = std::env::var("PATH") {
+        let paths: Vec<_> = std::env::split_paths(&path_var).collect();
+        for path in paths {
+
+            let python_path = path.join(bin);
+            if python_path.is_file() {
+                if let Ok(canonical_path) = python_path.canonicalize() {
+                    if let Some(python_str) = canonical_path.to_str() {
+                        return Some(python_str.to_owned());
+                    }
+                }
+            }
+        }
+    }
+    None
 }
 
 fn get_vendor_dir(app: tauri::AppHandle) -> Result<PathBuf, String> {
@@ -132,8 +155,16 @@ fn ensure_python_venv(app: tauri::AppHandle, path: PathBuf) -> Result<(), String
         .join("venv")
         .join(venv_name);
 
+    let python_path = match find_python_path() {
+        Some(path) => path,
+        None => {
+            error!("Failed to find python path");
+            return Err("Failed to find python path".to_string());
+        }
+    };
+
     if !venv_path.exists() {
-        let output = Command::new("python")
+        let output = Command::new(python_path)
             .args(["-m", "venv", venv_path.to_str().unwrap()])
             .output()
             .map_err(|e| e.to_string())?;
