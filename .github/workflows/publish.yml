@@ -55,6 +55,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OpenCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\opencv\\build' }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
           tagName: muskelanalyse-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'MuskelAnalyse v__VERSION__'
