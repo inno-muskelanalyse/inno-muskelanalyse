@@ -47,6 +47,7 @@ jobs:
       - name: Build OpenCV from source (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
+          pip install numpy
           git clone --depth 1 --branch 4.x https://github.com/opencv/opencv.git
           mkdir -p opencv/build
           cd opencv/build
