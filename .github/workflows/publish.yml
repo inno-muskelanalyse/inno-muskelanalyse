@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'yarn'
+
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: use Rust cache
@@ -40,11 +41,20 @@ jobs:
         if: matrix.platform == 'macos-latest'
         uses: Homebrew/actions/setup-homebrew@master
 
+      - name: cache homebrew (macos only)
+        if: matrix.platform == 'macos-latest'
+        uses: actions/cache@v2
+        with:
+          path: ~/Library/Caches/Homebrew
+          key: ${{ runner.os }}-brew-${{ hashFiles('**/Brewfile.lock.json') }}
+
       - name: install opencv (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
           brew install opencv@4
           brew link --force opencv@4
+        env:
+          HOMEBREW_NO_INSTALL_CLEANUP: true
 
       - name: install opencv (windows only)
         if: matrix.platform == 'windows-latest'
@@ -56,6 +66,7 @@ jobs:
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\OpenCV' }}
         with:
           tagName: app-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'App v__VERSION__'
