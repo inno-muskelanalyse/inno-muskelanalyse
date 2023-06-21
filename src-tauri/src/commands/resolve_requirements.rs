@@ -86,10 +86,17 @@ fn check_if_python_is_installed() -> Result<bool, String> {
 }
 
 fn find_python_path() -> Option<String> {
+    // check if python is in the path
+    let bin = match std::env::consts::OS {
+        "windows" => "python.exe",
+        _ => "python",
+    };
+    
     if let Ok(path_var) = std::env::var("PATH") {
         let paths: Vec<_> = std::env::split_paths(&path_var).collect();
         for path in paths {
-            let python_path = path.join("python");
+
+            let python_path = path.join(bin);
             if python_path.is_file() {
                 if let Ok(canonical_path) = python_path.canonicalize() {
                     if let Some(python_str) = canonical_path.to_str() {
