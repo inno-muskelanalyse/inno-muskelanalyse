@@ -109,7 +109,9 @@
     },
     "updater": {
       "active": true,
-      "endpoints": [],
+      "endpoints": [
+        "https://github.com/inno-muskelanalyse/inno-muskelanalyse/releases/download/latest/latest.json"
+      ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDU4MzIzMzIxNDMyNzVFQUEKUldTcVhpZERJVE15V0dhZ0Q1U05ndUxSdmtURi80NHI4eW5WclR3RWdWb2Q3YmNRaEdsaTJWa1UK",
       "dialog": true
     },
