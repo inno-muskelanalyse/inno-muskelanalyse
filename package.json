@@ -10,7 +10,7 @@
   },
   "private": true,
   "author": "UAS Technikum Wien",
-  "version": "0.0.0",
+  "version": "0.1.1",
   "scripts": {
     "dev": "next dev -p 1420",
     "build": "next build",
