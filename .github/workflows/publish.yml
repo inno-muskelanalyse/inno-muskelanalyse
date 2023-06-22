@@ -18,14 +18,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: "recursive"
-
-      - name: Update CHANGELOG
-        id: changelog
-        uses: requarks/changelog-action@v1
-        with:
-          token: ${{ github.token }}
-          tag: ${{ github.ref_name}}
-
+          
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -68,6 +61,6 @@ jobs:
         with:
           tagName: muskelanalyse-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'MuskelAnalyse v__VERSION__'
-          releaseBody: ${{ steps.changelog.outputs.changes }}
+          releaseBody: 'See the assets to download this version and install.'
           releaseDraft: false
           prerelease: false
