@@ -5,7 +5,26 @@ on:
       - main
 
 jobs:
+  changelog:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.changelog.outputs.clean_changelog }}
+      tag: ${{ steps.changelog.outputs.tag }}
+      version: ${{ steps.changelog.outputs.version }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+      - name: Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
   publish-tauri:
+    needs: changelog
     permissions:
       contents: write
     strategy:
@@ -18,7 +37,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: "recursive"
-          
+
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -59,8 +78,8 @@ jobs:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          tagName: muskelanalyse-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: 'MuskelAnalyse v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
+          tagName: ${{ needs.changelog.outputs.tag}} # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: 'MuskelAnalyse ${{ needs.changelog.outputs.version }}'
+          releaseBody: ${{ needs.changelog.outputs.changelog }}
           releaseDraft: false
           prerelease: false
