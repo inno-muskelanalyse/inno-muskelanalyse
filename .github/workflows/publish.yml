@@ -40,6 +40,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: "recursive"
+          ref: ${{ needs.changelog.outputs.tag }}
 
       - name: setup node
         uses: actions/setup-node@v3
