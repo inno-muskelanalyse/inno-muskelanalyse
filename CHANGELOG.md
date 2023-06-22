@@ -1,9 +1,9 @@
-## 0.1.3 (2023-06-22)
+## 0.1.4 (2023-06-22)
 
 
 ### Bug Fixes
 
-* skip pipeline if no changes detected ([994353a](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/994353aeb755a1971542873c47b5cad9eee6aa5c))
+* cross-compilation on mac ([bfdedaa](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/bfdedaa78bfd67554fc0cd91d5d21d6a614b0b8c))
 
 
 
