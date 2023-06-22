@@ -1,9 +1,9 @@
-## 0.1.4 (2023-06-22)
+## 0.1.5 (2023-06-22)
 
 
 ### Bug Fixes
 
-* cross-compilation on mac ([bfdedaa](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/bfdedaa78bfd67554fc0cd91d5d21d6a614b0b8c))
+* Add a recent project check to ensure project existence ([0fd8bb3](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/0fd8bb30aa03ae5a508bfe8b489fe1c278c07269))
 
 
 
