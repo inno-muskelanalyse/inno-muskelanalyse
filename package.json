@@ -17,7 +17,9 @@
     "lint": "next lint",
     "tauri": "tauri",
     "tauri:win:dev": "tauri dev --target=x86_64-pc-windows-msvc",
-    "tauri:win:build": "tauri build --target=x86_64-pc-windows-msvc"
+    "tauri:win:build": "tauri build --target=x86_64-pc-windows-msvc",
+    "tauri:macx86:dev": "cross-env OPENCV_DIR=/usr/local/Cellar/opencv/4.7.0_7 tauri dev --target=x86_64-apple-darwin",
+    "tauri:macx86:build": "cross-env OPENCV_DIR=/usr/local/Cellar/opencv/4.7.0_7 tauri build --target=x86_64-apple-darwin"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -49,6 +51,7 @@
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
     "autoprefixer": "^10.4.14",
+    "cross-env": "^7.0.3",
     "eslint": "8.39.0",
     "eslint-config-next": "^13.3.2",
     "postcss": "^8.4.23",

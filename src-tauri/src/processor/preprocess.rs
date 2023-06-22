@@ -74,9 +74,17 @@ impl Processor {
 
                     match preprocessing {
                         Ok(output) => {
+                            debug!("Preprocessing output: {:?}", output);
+                            // verify that the process exited successfully
+                            if !output.status.success() {
+                                error!("Preprocessing failed: {:?}", output);
+                                return;
+                            }
+
                             // trim output to the actual JSON (remove warnings)
                             // trim from the first '[' to the last ']'
                             let output = output.stdout;
+
                             let output = output.trim_start_matches(|c| c != '[');
                             let output = output.trim_end_matches(|c| c != ']');
 

@@ -113,7 +113,15 @@ fn build_cpp(path: std::path::PathBuf) -> Bin {
         name.to_string()
     };
 
-    let bin = Config::new(stripped_path)
+    let mut bin = Config::new(stripped_path);
+
+    if std::env::var("OPENCV_DIR").is_ok() {
+        let value = std::env::var("OPENCV_DIR").unwrap();
+        bin.env("OpenCV_DIR", &value);
+        bin.define("OpenCV_DIR", value);
+    };
+
+    let bin = bin
         .profile("Release")
         .build()
         .join("bin")
@@ -124,7 +132,7 @@ fn build_cpp(path: std::path::PathBuf) -> Bin {
     Bin { path: bin }
 }
 
-fn resolve_libs(bin: std::path::PathBuf) -> Vec<std::path::PathBuf> {   
+fn resolve_libs(bin: std::path::PathBuf) -> Vec<std::path::PathBuf> {
     let dir = bin.parent().unwrap().join("build");
 
     // check if there is a Release directory inside the build directory
