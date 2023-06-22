@@ -93,7 +93,11 @@
         "signingIdentity": null
       },
       "shortDescription": "",
-      "targets": "all",
+      "targets": [
+        "app",
+        "msi",
+        "updater"
+      ],
       "windows": {
         "certificateThumbprint": null,
         "digestAlgorithm": "sha256",
