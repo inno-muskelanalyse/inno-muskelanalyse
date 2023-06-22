@@ -13,6 +13,7 @@ jobs:
       changelog: ${{ steps.changelog.outputs.clean_changelog }}
       tag: ${{ steps.changelog.outputs.tag }}
       version: ${{ steps.changelog.outputs.version }}
+      skip: ${{ steps.changelog.outputs.skipped }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -34,6 +35,7 @@ jobs:
         platform: [macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
+    if: ${{ needs.changelog.outputs.skip != 'true' }}
     steps:
       - uses: actions/checkout@v3
         with:
