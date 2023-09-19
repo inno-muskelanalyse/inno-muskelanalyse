@@ -11,6 +11,7 @@ const { version, author, displayName, filetypeAssociation, homepage } = packageI
 
 const Welcome: NextPageWithLayout = () => {
     const [parent] = useAutoAnimate();
+
     const ready = useQuery<Boolean, string>(["ready"], fetch_is_ready, {
         retry: false,
         refetchOnWindowFocus: false,
