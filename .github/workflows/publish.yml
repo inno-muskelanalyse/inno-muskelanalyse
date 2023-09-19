@@ -5,7 +5,28 @@ on:
       - main
 
 jobs:
+  changelog:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      changelog: ${{ steps.changelog.outputs.clean_changelog }}
+      tag: ${{ steps.changelog.outputs.tag }}
+      version: ${{ steps.changelog.outputs.version }}
+      skip: ${{ steps.changelog.outputs.skipped }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: "recursive"
+      - name: Changelog
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          skip-git-pull: true
+
   publish-tauri:
+    needs: changelog
     permissions:
       contents: write
     strategy:
@@ -14,10 +35,13 @@ jobs:
         platform: [macos-latest, windows-latest]
 
     runs-on: ${{ matrix.platform }}
+    if: ${{ needs.changelog.outputs.skip != 'true' }}
     steps:
       - uses: actions/checkout@v3
         with:
           submodules: "recursive"
+          ref: ${{ needs.changelog.outputs.tag }}
+
       - name: setup node
         uses: actions/setup-node@v3
         with:
@@ -55,9 +79,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OpenCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\opencv\\build' }}
+          TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+          TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
         with:
-          tagName: muskelanalyse-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: 'MuskelAnalyse v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
+          tagName: ${{ needs.changelog.outputs.tag}} # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: 'MuskelAnalyse ${{ needs.changelog.outputs.version }}'
+          releaseBody: ${{ needs.changelog.outputs.changelog }}
           releaseDraft: false
           prerelease: false

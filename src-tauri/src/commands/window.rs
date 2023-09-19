@@ -163,6 +163,12 @@ pub async fn recent_project(app: tauri::AppHandle) -> Result<String, String> {
     match store.get("recent-project") {
         Some(path) => {
             debug!("Recent project found: {}", path);
+            // check if the project still exists
+            let check_path = std::path::Path::new(path.as_str().unwrap());
+            if !check_path.exists() {
+                debug!("Recent project doesn't exist anymore");
+                return Err("Recent project doesn't exist anymore".into());
+            }
             Ok(path.as_str().unwrap().to_string())
         }
         None => {
