@@ -1,0 +1,59 @@
+name: "test-on-pr"
+
+on: [pull_request]
+
+# This workflow will build your tauri app without uploading it anywhere.
+
+jobs:
+  build-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: "recursive"
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+          cache: "yarn"
+
+      - name: setup homebrew
+        if: matrix.platform == 'macos-latest'
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: use Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+          cache-on-failure: true
+
+      - name: install opencv (windows only)
+        if: matrix.platform == 'windows-latest'
+        run: |
+          choco install opencv --params "/InstallationPath:C:\"
+
+      - name: install opencv (macos only)
+        if: matrix.platform == 'macos-latest'
+        run: |
+          brew install opencv@4
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: true
+          HOMEBREW_NO_INSTALL_CLEANUP: true
+
+      - name: install frontend dependencies
+        run: yarn install # change this to npm or pnpm depending on which one you use
+
+      # If tagName and releaseId are omitted tauri-action will only build the app and won't try to upload any asstes.
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OpenCV_DIR: ${{ matrix.platform == 'windows-latest' && 'C:\\opencv\\build' }}
