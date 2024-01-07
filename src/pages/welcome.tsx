@@ -12,24 +12,26 @@ const { version, author, displayName, filetypeAssociation, homepage } = packageI
 const Welcome: NextPageWithLayout = () => {
     const [parent] = useAutoAnimate();
 
-    const ready = useQuery<Boolean, string>(["ready"], fetch_is_ready, {
+    const ready = useQuery<Boolean, string>({
+        queryKey: ["ready"],
+        queryFn: fetch_is_ready,
         retry: false,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchInterval: false,
         refetchIntervalInBackground: false,
-        onError: (err) => { console.error(err) }
     });
 
-    const recentProject = useQuery<string, string>(["recentProject"], async () => await invoke<string>("recent_project"), {
+    const recentProject = useQuery<string, string>({
+        queryKey: ["recentProject"],
+        queryFn: async () => await invoke<string>("recent_project"),
         retry: false,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchInterval: false,
         refetchIntervalInBackground: false,
-        onError: (err) => { console.error(err) },
     });
 
 
