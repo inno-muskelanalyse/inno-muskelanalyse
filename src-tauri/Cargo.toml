@@ -12,31 +12,46 @@ build = "build/main.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [build-dependencies]
-tauri-build = { version = "1.4.0", features = [] }
+tauri-build = { version = "1.5.1", features = [] }
 cargo-emit = "0.2.1"
-cmake = "0.1"
+cmake = "0.1.50"
 current_platform = "0.2.0"
 fs_extra = "1.3.0"
 
 [dependencies]
-ts-rs = { version = "6.2.1", features = ["chrono-impl"] }
-serde_json = "1.0.96"
-serde = { version = "1.0", features = ["derive"] }
-tauri = { version = "1.4.0", features = [ "updater", "window-create", "window-show", "dialog-confirm", "dialog-message", "dialog-open", "dialog-save", "path-all", "protocol-asset", "shell-execute", "shell-open", "shell-sidecar", "window-close", "window-start-dragging"] }
+ts-rs = { version = "7.0.0", features = ["chrono-impl"] }
+serde_json = "1.0.111"
+serde = { version = "1.0.195", features = ["derive"] }
+tauri = { version = "1.5.4", features = [
+    "updater",
+    "window-create",
+    "window-show",
+    "dialog-confirm",
+    "dialog-message",
+    "dialog-open",
+    "dialog-save",
+    "path-all",
+    "protocol-asset",
+    "shell-execute",
+    "shell-open",
+    "shell-sidecar",
+    "window-close",
+    "window-start-dragging",
+] }
 tauri-plugin-window-state = "0.1"
-diesel = { version = "2.1.0", features = ["sqlite", "chrono"] }
+diesel = { version = "2.1.4", features = ["sqlite", "chrono"] }
 diesel_migrations = { version = "2.1.0", features = ["sqlite"] }
-dotenvy = "0.15"
-chrono = { version = "0.4.26", features = ["serde"] }
+dotenvy = "0.15.7"
+chrono = { version = "0.4.31", features = ["serde"] }
 mime_guess = "2.0.4"
-uuid = { version = "1.3", features = ["serde", "v4"] }
-image = "0.24"
-libsqlite3-sys = { version = "0.26.0", features = ["bundled"] }
-futures = "0.3"
+uuid = { version = "1.6.1", features = ["serde", "v4"] }
+image = "0.24.7"
+libsqlite3-sys = { version = "0.27.0", features = ["bundled"] }
+futures = "0.3.30"
 multi-map = "1.3.0"
-log = "0.4"
+log = "0.4.20"
 chashmap = "2.2.2"
-csv = "1.2"
+csv = "1.3.0"
 dunce = "1.0.4"
 tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs", branch = "dev" }
