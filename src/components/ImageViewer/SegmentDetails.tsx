@@ -10,7 +10,10 @@ export type SegmentDetailsProps = {
 };
 
 const SegmentDetails = ({ segment }: SegmentDetailsProps) => {
-    const { data: image, isLoading, error } = useQuery<string, string>([`/api/segments/${segment.uuid}/image`], () => fetcher(segment));
+    const { data: image, isLoading, error } = useQuery<string, string>({
+        queryKey: [`/api/segments/${segment.uuid}/image`],
+        queryFn: () => fetcher(segment)
+    });
 
     if (error) return <div>Beim Laden ist ein Fehler aufgetreten: {error}</div>
     if (isLoading) return (

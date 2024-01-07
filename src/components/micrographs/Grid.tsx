@@ -4,7 +4,6 @@ import { MoreVertical, Trash, Trash2, FileUp } from "lucide-react";
 import { Fragment } from "react";
 import clsx from "clsx";
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { convertFileSrc, invoke } from "@tauri-apps/api/tauri";
 import { LinearProgress, } from "@mui/material";
@@ -41,10 +40,9 @@ type GridItemProps = {
 }
 const GridItem = ({ micrograph, onDelete, onExport }: GridItemProps) => {
     const [animationParent] = useAutoAnimate();
-    const { data } = useQuery(["processor_status", micrograph.uuid], () => getProcessorStatus(micrograph.uuid), {
-        onError: (err) => {
-            console.error(err);
-        },
+    const { data } = useQuery({
+        queryKey: ["processor_status", micrograph.uuid],
+        queryFn: () => getProcessorStatus(micrograph.uuid),
         refetchInterval: 200
     });
 

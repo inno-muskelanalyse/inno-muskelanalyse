@@ -14,7 +14,11 @@ import Grid from "../../components/micrographs/Grid";
 const MicrographsPage = () => {
     const queryClient = useQueryClient();
 
-    const { data, refetch, isLoading } = useQuery(["micrographs"], micrographFetcher);
+    const { data, refetch, isLoading } = useQuery({
+        queryKey: ["micrographs"],
+        queryFn: micrographFetcher
+    });
+
     useEffect(() => {
         const unlisten = listen("UPDATE_MICROGRAPHS", () => refetch());
 
@@ -23,18 +27,29 @@ const MicrographsPage = () => {
         }
     }, [refetch]);
 
-    const { mutate: mutate_import } = useMutation(["import_micrographs"], importMicrographs, {
+    const { mutate: mutate_import } = useMutation({
+        mutationKey: ["import_micrographs"],
+        mutationFn: importMicrographs,
         onSuccess: () => {
             refetch();
-            queryClient.invalidateQueries(["queue_status"]);
+            queryClient.invalidateQueries({
+                queryKey: ["queue_status"]
+            });
         }
     });
-    const { mutate: mutate_delete } = useMutation(["delete_micrograph"], deleteMicrograph, {
+
+    const { mutate: mutate_delete } = useMutation({
+        mutationKey: ["delete_micrograph"],
+        mutationFn: deleteMicrograph,
         onSuccess: () => {
             refetch();
         }
     });
-    const { mutate: mutate_export } = useMutation(["export_micrograph"], exportMicrograph);
+
+    const { mutate: mutate_export } = useMutation({
+        mutationKey: ["export_micrograph"],
+        mutationFn: exportMicrograph
+    });
 
     if (isLoading) {
         return (
