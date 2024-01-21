@@ -52,17 +52,6 @@ jobs:
         if: matrix.platform == 'macos-latest'
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: forcefully link brew packages (macos only)
-        if: matrix.platform == 'macos-latest'
-        run: |
-          brew list -1 | xargs -I {} brew link --overwrite {}
-
-      - name: cleanup / upgrade homebrew
-        if: matrix.platform == 'macos-latest'
-        run: |
-          brew cleanup
-          brew upgrade
-
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: use Rust cache
@@ -80,8 +69,6 @@ jobs:
         if: matrix.platform == 'macos-latest'
         run: |
           brew install opencv@4
-        env: 
-          HOMEBREW_NO_AUTO_UPDATE: true
 
       - name: install frontend dependencies
         run: yarn install # change this to npm or pnpm depending on which one you use
