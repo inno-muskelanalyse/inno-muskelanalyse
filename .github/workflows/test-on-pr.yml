@@ -44,10 +44,13 @@ jobs:
       - name: install opencv (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
+          rm '/usr/local/bin/2to3'
+          rm '/usr/local/bin/2to3-3.12'
+          rm '/usr/local/bin/idle3.12'
+          rm '/usr/local/bin/pydoc3.12'
+          rm '/usr/local/bin/python3.12'
+          rm '/usr/local/bin/python3.12-config'
           brew install opencv@4
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: true
-          HOMEBREW_NO_INSTALL_CLEANUP: true
 
       - name: install frontend dependencies
         run: yarn install # change this to npm or pnpm depending on which one you use
