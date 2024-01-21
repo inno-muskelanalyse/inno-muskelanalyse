@@ -15,6 +15,7 @@ mod python;
 mod schema;
 mod state;
 mod utils;
+mod vendor;
 
 fn main() {
     let _ = fix_path_env::fix();

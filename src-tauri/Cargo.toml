@@ -60,7 +60,6 @@ fix-path-env = { git = "https://github.com/tauri-apps/fix-path-env-rs", branch =
 tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 which = "5.0.0"
 memoize = { version = "0.4.2", features = ["full"] }
-config = { version = "0.13.4", features = ["toml"] }
 semver = "1.0.21"
 rayon = "1.8.0"
 strum = "0.25.0"
