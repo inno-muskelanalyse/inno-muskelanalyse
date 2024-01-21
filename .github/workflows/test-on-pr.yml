@@ -27,10 +27,10 @@ jobs:
         if: matrix.platform == 'macos-latest'
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: forcefully link python3 (macos only)
+      - name: forcefully link brew packages (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
-          brew link --overwrite python@3.11
+          brew list -1 | xargs -I {} brew link --overwrite {}
 
       - name: cleanup / upgrade homebrew
         if: matrix.platform == 'macos-latest'
