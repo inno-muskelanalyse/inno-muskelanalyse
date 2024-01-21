@@ -68,7 +68,7 @@ jobs:
       - name: install opencv (macos only)
         if: matrix.platform == 'macos-latest'
         run: |
-          brew install opencv@4
+          brew install --force --overwrite opencv@4
 
       - name: install frontend dependencies
         run: yarn install # change this to npm or pnpm depending on which one you use
