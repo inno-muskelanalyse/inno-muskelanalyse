@@ -6,29 +6,46 @@ import { NextPageWithLayout } from "./_app";
 import { useQuery } from "@tanstack/react-query";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import path from "path";
+import { useEffect, useState } from "react";
 
 const { version, author, displayName, filetypeAssociation, homepage } = packageInfo;
 
 const Welcome: NextPageWithLayout = () => {
     const [parent] = useAutoAnimate();
-    const ready = useQuery<Boolean, string>(["ready"], fetch_is_ready, {
+    const [delayParent] = useAutoAnimate();
+    const [showDelayMessage, setShowDelayMessage] = useState(false);
+
+    const ready = useQuery<unknown, string>({
+        queryKey: ["ready"],
+        queryFn: fetch_is_ready,
         retry: false,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchInterval: false,
         refetchIntervalInBackground: false,
-        onError: (err) => { console.error(err) }
     });
 
-    const recentProject = useQuery<string, string>(["recentProject"], async () => await invoke<string>("recent_project"), {
+    useEffect(() => {
+        let timer;
+        if (ready.status === "pending") {
+            // Setup a timer to show the delay message after 5 seconds
+            timer = setTimeout(() => setShowDelayMessage(true), 5000);
+        } else {
+            clearTimeout(timer);
+            setShowDelayMessage(false);
+        }
+    }, [ready.status]);
+
+    const recentProject = useQuery<string, string>({
+        queryKey: ["recentProject"],
+        queryFn: async () => await invoke<string>("recent_project"),
         retry: false,
         refetchOnWindowFocus: false,
         refetchOnMount: false,
         refetchOnReconnect: false,
         refetchInterval: false,
         refetchIntervalInBackground: false,
-        onError: (err) => { console.error(err) },
     });
 
 
@@ -41,9 +58,14 @@ const Welcome: NextPageWithLayout = () => {
                 </div>
                 {
                     ready.isLoading && (
-                        <div className="w-full h-[80%] flex flex-col justify-center items-center gap-8">
+                        <div className="w-full h-[80%] flex flex-col justify-center items-center gap-8" ref={delayParent}>
                             <Loader2 className="h-16 w-16 animate-spin" />
                             <p>Getting ready...</p>
+                            {ready.isLoading && showDelayMessage && (
+                                <span className="text-gray-400 font-normal">
+                                    This process can take a few minutes, please be patient.
+                                </span>
+                            )}
                         </div>
                     )
                 }
@@ -56,7 +78,7 @@ const Welcome: NextPageWithLayout = () => {
                     )
                 }
                 {
-                    ready.data && (
+                    ready.isSuccess && (
                         <div className="grid grid-cols-5 gap-1 py-4">
                             <Item Icon={FilePlusIcon} onClick={handle_create_project}>Create a new Project</Item>
                             <Item Icon={FileSearchIcon} onClick={handle_open_project}>Open Project</Item>
@@ -88,7 +110,7 @@ Welcome.getLayout = (page) => {
 }
 
 const fetch_is_ready = async () => {
-    const result: Boolean = await invoke("check_requirements");
+    const result = await invoke("check_requirements");
 
     return result;
 }

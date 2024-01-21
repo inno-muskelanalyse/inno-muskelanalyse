@@ -4,16 +4,18 @@
 )]
 
 use tauri::Manager;
-use tauri_plugin_log::LogTarget;
+use tauri_plugin_log::{fern::colors::ColoredLevelConfig, LogTarget};
 
 mod commands;
 mod image_manipulation;
 mod migrations;
 mod models;
 mod processor;
+mod python;
 mod schema;
 mod state;
 mod utils;
+mod vendor;
 
 fn main() {
     let _ = fix_path_env::fix();
@@ -51,7 +53,8 @@ fn main() {
         ])
         .plugin(
             tauri_plugin_log::Builder::default()
-                .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
+                .targets([LogTarget::Stdout, LogTarget::LogDir, LogTarget::Webview])
+                .with_colors(ColoredLevelConfig::default())
                 .build(),
         )
         .plugin(tauri_plugin_store::Builder::default().build())

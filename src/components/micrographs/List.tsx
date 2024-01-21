@@ -43,10 +43,9 @@ type ListItemProps = {
 }
 const ListItem = ({ micrograph, onDelete, onExport }: ListItemProps) => {
     const [animationParent] = useAutoAnimate();
-    const { data } = useQuery(["processor_status", micrograph.uuid], () => getProcessorStatus(micrograph.uuid), {
-        onError: (err) => {
-            console.error(err);
-        },
+    const { data } = useQuery({
+        queryKey: ["processor_status", micrograph.uuid],
+        queryFn: () => getProcessorStatus(micrograph.uuid),
         refetchInterval: 200
     });
 

@@ -8,23 +8,21 @@ import { CachedMicrograph } from "../../../src-tauri/bindings/CachedMicrograph";
 import { CachedSegment } from "../../../src-tauri/bindings/CachedSegment";
 const Page: NextPageWithLayout = () => {
     const { query } = useRouter();
-    const { data, isLoading } = useQuery<{ micrograph: CachedMicrograph, segments: CachedSegment[] }>(["micrograph", query.project, query.micrograph], async () => {
-        return {
+    const { data, isLoading } = useQuery<{ micrograph: CachedMicrograph, segments: CachedSegment[] }>({
+        queryKey: ["micrograph", query.project, query.micrograph],
+        queryFn: async () => ({
             micrograph: await invoke("get_micrograph", { projectId: query.project, micrographId: query.micrograph }),
             segments: await invoke("get_segments", { projectId: query.project, micrographId: query.micrograph }),
-        }
-    },
-        {
-            enabled: !!query.project && !!query.micrograph,
-            refetchInterval(data, query) {
-                if (data?.micrograph.status == "Done") {
-                    return false;
-                } else {
-                    return 200;
-                }
-            },
-        }
-    );
+        }),
+        enabled: !!query.project && !!query.micrograph,
+        refetchInterval(query) {
+            if (query.state.data?.micrograph.status == "Done") {
+                return false;
+            } else {
+                return 200;
+            }
+        },
+    });
 
     if (isLoading) {
         return (
