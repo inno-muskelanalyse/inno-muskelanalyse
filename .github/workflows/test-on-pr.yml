@@ -52,7 +52,6 @@ jobs:
           brew install opencv@4
         env:
           HOMEBREW_NO_AUTO_UPDATE: true
-          HOMEBREW_NO_INSTALL_CLEANUP: true
 
       - name: install frontend dependencies
         run: yarn install # change this to npm or pnpm depending on which one you use
