@@ -52,10 +52,9 @@ jobs:
         if: matrix.platform == 'macos-latest'
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: update homebrew
+      - name: upgrade homebrew
         if: matrix.platform == 'macos-latest'
         run: |
-          brew update
           brew upgrade
 
       - name: install Rust stable
