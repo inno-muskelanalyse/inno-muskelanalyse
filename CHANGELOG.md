@@ -1,9 +1,9 @@
-## 0.1.5 (2023-06-22)
+## 0.1.6 (2024-01-23)
 
 
 ### Bug Fixes
 
-* Add a recent project check to ensure project existence ([0fd8bb3](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/0fd8bb30aa03ae5a508bfe8b489fe1c278c07269))
+* python venv version check ([#7](https://github.com/inno-muskelanalyse/inno-muskelanalyse/issues/7)) ([5b65273](https://github.com/inno-muskelanalyse/inno-muskelanalyse/commit/5b652739f37b37a1cc785966f169d2ef09d00426)), closes [#5](https://github.com/inno-muskelanalyse/inno-muskelanalyse/issues/5)
 
 
 
